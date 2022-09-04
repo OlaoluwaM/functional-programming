@@ -48,7 +48,7 @@ We'll see how functional programming provides us with tools to structure our cod
 
 Other than understanding what functional programming _is_, it is also essential to understand what is it's goal.
 
-Functional programming's goal is to **tame a system's complexity** through the use of formal _models_, and to give careful attention to **code's properties** and refactoring ease.
+Functional programming's goal is to **tame a system's complexity** through the use of formal _models_, and to give careful attention to **properties of code** and refactoring ease.
 
 > Functional programming will help teach people the mathematics behind program construction:
 >
@@ -56,7 +56,7 @@ Functional programming's goal is to **tame a system's complexity** through the u
 > - how to reason about side effects
 > - how to write consistent, general, less ad-hoc APIs
 
-What does it mean to give careful attention to code's properties? Let's see with an example:
+What does it mean to give careful attention to the **properties of code**? Let's see with an example:
 
 **Example**
 
@@ -115,7 +115,7 @@ Think about how easier it is to review a PR that involves `map` rather than a `f
 Functional programming is based on the following two pillars:
 
 - Referential transparency
-- Composition (as universal design pattern)
+- Composition (as a universal design pattern)
 
 All of the remaining content derives directly or indirectly from those two points.
 
@@ -174,7 +174,7 @@ On the last line I cannot replace `xs` with its initial value `[1, 2, 3]` since 
 
 Why is referential transparency so important? Because it allows us to:
 
-- **reason about code locally**, there is no need to know external context in order to understand a fragment of code
+- **reason about code locally** there is no need to know external context (implicit environment) in order to understand or even execute a fragment of code
 - **refactor** without changing our system's behaviour
 
 **Quiz**. Suppose we have the following program:
@@ -187,7 +187,7 @@ const x = await question('What is your name?')
 const y = await question('What is your name?')
 ```
 
-Can I refactor in this way? Does the program's behavior change or is it going to change?
+Can I refactor in this way? Does the program's behavior change or is it going to change (pun intended)?
 
 ```ts
 const x = await question('What is your name?')
@@ -201,7 +201,7 @@ In functional programming, where every expression is referentially transparent, 
 
 ## Composition
 
-Functional programming's fundamental pattern is _composition_: we compose small units of code accomplishing very specific tasks into larger and complex units.
+Functional programming's fundamental pattern is _composition_. We compose small units of code accomplishing very specific tasks into larger and complex units.
 
 An example of a "from the smallest to the largest" composition pattern we can think of:
 
@@ -227,7 +227,7 @@ combinator: Thing -> Thing
 
 **Example**. The function `double` combines two numbers.
 
-The goal of a combinator is to create new *Thing*s from *Thing*s already defined.
+The goal of a combinator is to create new _Thing_s from_Thing_s already defined.
 
 Since the output of a combinator, the new _Thing_, can be passed around as input to other programs and combinators, we obtain a combinatorial explosion of opportunities, which makes this pattern extremely powerful.
 
@@ -263,17 +263,17 @@ Of the two combinators in `01_retry.ts` a special mention goes to `concat` since
 
 A semigroup is a recipe to combine two, or more, values.
 
-A semigroup is an **algebra**, which is generally defined as a specific combination of:
+A semigroup is an **algebraic structure**, which is generally defined as a specific combination of:
 
 - one or more sets
-- one or more operations on those sets
+- one or more operations on (elements of) those sets
 - zero or more laws on the previous operations
 
-Algebras are how mathematicians try to capture an idea in its purest form, eliminating everything that is superfluous.
+Algebraic structures are how mathematicians try to capture an idea in its purest form, eliminating everything that is superfluous.
 
 > When an algebra is modified the only allowed operations are those defined by the algebra itself according to its own laws
 
-Algebras can be thought of as an abstraction of **interfaces**:
+Algebraic structures can be thought of as an abstraction of **interfaces**:
 
 > When an interface is modified the only allowed operations are those defined by the interface itself according to its own laws
 
@@ -281,7 +281,7 @@ Before getting into semigroups, let's see first an example of an algebra, a _mag
 
 ## Definition of a Magma
 
-A Magma<A> is a very simple algebra:
+A Magma<A> is a very simpl algebraic structures:
 
 - a set or type (A)
 - a `concat` operation
@@ -348,7 +348,7 @@ concat(concat(a, b), c) = concat(a, concat(b, c))
 
 holds for any `x`, `y`, `z` in `A`.
 
-In layman terms _associativity_ tells us that we do not have to worry about parentheses in expressions and that we can simply write `x * y * z` (there's no ambiguity).
+In layman's terms, _associativity_ tells us that we do not have to worry about parentheses in expressions and that we can simply write `x * y * z` (there's no ambiguity).
 
 **Example**
 
@@ -1428,32 +1428,32 @@ console.log(
 
 Let's recap what we have seen till now.
 
-We have seen how an **algebra** is a combination of:
+We have seen how an **algebraic structure** is a combination of:
 
 - some type `A`
 - some operations involving the type `A`
 - some laws and properties for that combination.
 
-The first algebra we have seen has been the magma, an algebra defined on some type A equipped with one operation called `concat`. There were no laws involved in `Magma<A>` the only requirement we had was that the `concat` operation had to be _closed_ on `A` meaning that the result:
+The first algebraic structure we have seen has been the magma, an algebraic structure defined on some type `A` equipped with one operation called `concat`. There were no laws involved in `Magma<A>`. Its only requirement was that the `concat` operation had to be _closed_ on `A` meaning that the following operation:
 
 ```ts
 concat(first: A, second: A) => A
 ```
 
-has still to be an element of the `A` type.
+had to output an element of the `A` type.
 
-Later on we have seen how adding one simple requirement, _associativity_, allowed some `Magma<A>` to be further refined as a `Semigroup<A>`, and how associativity captures the possibility of computations to be parallelized.
+Later on, we saw how the additional requirement of _associativity_ on `concat` allowed some `Magma<A>` to become `Semigroup<A>`s, and how **associativity** greatly simplified our ability to parallelize computation.
 
 Now we're going to add another condition on Semigroup.
 
-Given a `Semigroup` defined on some set `A` with some `concat` operation, if there is some element in `A` – we'll call this element _empty_ – such as for every element `a` in `A` the two following equations hold true:
+Given a `Semigroup` defined on some set `A` with some `concat` operation, if there is some element in `A` – we'll call this element _empty_ – such that for every element `a` in `A` the two following equations hold true:
 
-- **Right identity**: `concat(a, empty) = a`
-- **Left identity**: `concat(empty, a) = a`
+- **Right identity**: `concat(a, empty) == a`
+- **Left identity**: `concat(empty, a) == a`
 
 then the `Semigroup` is also a `Monoid`.
 
-**Note**: We'll call the `empty` element **unit** for the rest of this section. There's other synonyms in literature, some of the most common ones are _neutral element_ and _identity_element_.
+**Note**: We'll call the `empty` element **unit** for the rest of this section. There are other synonyms in the literature, but some of the most common ones are _neutral element_ and _identity_element_.
 
 We have seen how in TypeScript `Magma`s and `Semigroup`s, can be modeled with `interface`s, so it should not come as a surprise that the very same can be done for `Monoid`s.
 
@@ -1465,7 +1465,7 @@ interface Monoid<A> extends Semigroup<A> {
 }
 ```
 
-Many of the semigroups we have seen in the previous sections can be extended to become `Monoid`s. All we need to find is some element of type `A` for which the Right and Left identities hold true.
+Many of the semigroups defined in the previous sections can be extended to become `Monoid`s. To do this, All we would need to find is some element of type `A` for which the Right and Left identities hold true.
 
 ```ts
 import { Monoid } from 'fp-ts/Monoid'
@@ -1550,7 +1550,7 @@ An **endomorphism** is a function whose input and output type is the same:
 type Endomorphism<A> = (a: A) => A
 ```
 
-Given a type `A`, all endomorphisms defined on `A` are a monoid, such as:
+Given a type `A`, all endomorphisms defined on `A` are monoids given that:
 
 - the `concat` operation is the usual function composition
 - the unit, our `empty` value is the identity function
@@ -1641,13 +1641,13 @@ In the first chapter we've seen an informal definition of a pure function:
 
 > A pure function is a procedure that given the same input always returns the same output and does not have any observable side effect.
 
-Such an informal statement could leave space for some doubts, such as:
+Such an informal statement could leave space for some doubts:
 
 - what is a "side effect"?
 - what does it means "observable"?
 - what does it mean "same"?
 
-Let's see a formal definition of the concept of a function.
+Let's see a formal definition of the concept of a pure function.
 
 **Note**. If `X` and `Y` are sets, then with `X × Y` we indicate their _cartesian product_, meaning the set
 
@@ -1687,7 +1687,7 @@ The one in the example is called an _extensional_ definition of a function, mean
 
 Naturally, when such a set is infinite this proves to be problematic. We can't list the entire domain and codomain of all functions.
 
-We can get around this issue by introducing the one that is called _intensional_ definition, meaning that we express a condition that has to hold for every couple `(x, y) ∈ f` meaning `y = x * 2`.
+We can get around this issue by introducing what is called an _intensional_ definition, meaning that we express a condition that has to hold for every couple `(x, y) ∈ f` meaning `y = x * 2`.
 
 This the familiar form in which we write the `double` function and its definition in TypeScript:
 
@@ -2275,7 +2275,7 @@ the callback components though are **dependent**: we either get an `Error` **or*
 | `Error`     | `string`    | ✘      |
 | `undefined` | `undefined` | ✘      |
 
-This API is clarly not modeled on the following premise:
+This API is clearly not modeled on the following premise:
 
 > Make impossible state unrepresentable
 
@@ -2443,7 +2443,7 @@ const result: boolean = pipe(
 )
 ```
 
-What if we had two values of type `Option<number>`? It would be pretty annoying to write the same code we just wrote above, the only difference afterall would be how we compare the two values contained in the `Option`.
+What if we had two values of type `Option<number>`? It would be pretty annoying to write the same code we just wrote above, the only difference after all would be how we compare the two values contained in the `Option`.
 
 Thus we can generalize the necessary code by requiring the user to provide an `Eq` instance for `A` and then derive an `Eq` instance for `Option<A>`.
 
@@ -2633,7 +2633,7 @@ export const getLastMonoid = <A = never>(): Monoid<Option<A>> =>
 
 **Example**
 
-`getLastMonoid` can be useful to manage optional values. Let's seen an example where we want to derive user settings for a text editor, in this case VSCode.
+`getLastMonoid` can be useful to manage optional values. Let's see an example where we want to derive user settings for a text editor like VSCode.
 
 ```ts
 import { Monoid, struct } from 'fp-ts/Monoid'
@@ -2683,7 +2683,7 @@ console.log(monoidSettings.concat(workspaceSettings, userSettings))
 
 We have seen how the `Option` data type can be used to handle partial functions, which often represent computations than can fail or throw exceptions.
 
-This data type might be limiting in some use cases tho. While in the case of success we get `Some<A>` which contains information of type `A`, the other member, `None` does not carry any data. We know it failed, but we don't know the reason.
+This data type might be limiting in some use cases though. While in the case of success we get `Some<A>` which contains information of type `A`, the other member, `None` does not carry any data. We know it failed, but we don't know the reason.
 
 In order to fix this we simply need to another data type to represent failure, we'll call it `Left<E>`. We'll also replace the `Some<A>` type with the `Right<A>`.
 
@@ -2824,7 +2824,7 @@ We need to be able to refer to some **rigorous theory**, one able to answer such
 
 We need to refer to a **formal definition** of composability.
 
-Luckily, for the last 70 years ago, a large number of researchers, members of the oldest and largest humanity's open source project (mathematics) occupied itself with developing a theory dedicated to composability: **category theory**, a branch of mathematics founded by Saunders Mac Lane along Samuel Eilenberg (1945).
+Luckily, for the last 70 years ago, a large number of researchers, members of the oldest and largest humanity's open source project (mathematics) occupied itself with developing a theory dedicated to composability: **category theory**, a branch of mathematics founded by Saunders Mac Lane along with Samuel Eilenberg (1945).
 
 > Categories capture the essence of composition.
 
@@ -3030,7 +3030,7 @@ function log(message: string): DSL {
 
 This technique requires a way to combine effects and the definition of an interpreter able to execute the side effects when launching the final program.
 
-The second technique, way simpler in TypeScript, is to enclose the computation in a _thunk_:
+The second technique, which is way simpler in TypeScript, is to enclose the computation in a _thunk_:
 
 ```ts
 // a thunk representing a synchronous side effect
@@ -3153,7 +3153,7 @@ Let's consider the following boundary: `B = F<C>` for some type constructor `F`,
 - `f: (a: A) => F<B>` is an effectful program
 - `g: (b: B) => C` is a pure program
 
-In order to compose `f` with `g` we need to find a procedure that allows us to derive a function `g` from a function `(b: B) => C` to a function `(fb: F<B>) => F<C>` in order to use the usual function composition (this way the codomain of `f` would be the same of the new function's domain).
+In order to compose `f` with `g` we need to find a procedure that allows us to transform a function `g` from a function with a signature of `(b: B) => C` to a function with a signature of `(fb: F<B>) => F<C>` as doing so would allow us use the usual function composition (this way the codomain of `f` would be the same of the new function's domain).
 
 <img src="images/map.png" width="500" alt="map" />
 
@@ -3181,7 +3181,9 @@ interface User {
   readonly followers: ReadonlyArray<User>
 }
 
+// f: (a: A) => F<B>
 const getFollowers = (user: User): ReadonlyArray<User> => user.followers
+// g: (b: B) => C
 const getName = (user: User): string => user.name
 
 // getFollowersNames: User -> ReadonlyArray<string>
@@ -3377,34 +3379,54 @@ Now we know the practical side of functors, let's see the formal definition.
 
 A functor is a pair `(F, map)` where:
 
-- `F` is an `n`-ary (`n >= 1`) type constructor mapping every type `X` in a type `F<X>` (**map between objects**)
+- `F` is an `n`-ary (`n >= 1`) type constructor mapping every type `X` to the type `F<X>` (**map between objects**)
 - `map` is a function with the following signature:
 
 ```ts
 map: <A, B>(f: (a: A) => B) => ((fa: F<A>) => F<B>)
 ```
 
-that maps every function `f: (a: A) => B` in a function `map(f): (fa: F<A>) => F<B>` (**map between morphism**)
+that maps every function `f: (a: A) => B` to a function with the following signature `map(f): (fa: F<A>) => F<B>` (**map between morphism**)
 
-The following properties have to hold true:
+In addition to its constituents, a _Functor_ is further characterized by the following properties called the _“[Functor laws](https://wiki.haskell.org/Functor#Description)”_
 
-- `map(1`<sub>X</sub>`)` = `1`<sub>F(X)</sub> (**identities go to identities**)
-- `map(g ∘ f) = map(g) ∘ map(f)` (**the image of a composition is the composition of its images**)
+<details>
+  <summary><b>Functors must preserve identity morphisms</b></summary>
+  <br>
 
-The second law allows to refactor and optimize the following computation:
+  ```ts
+  map(id) = id
+  ```
 
-```ts
-import { flow, increment, pipe } from 'fp-ts/function'
-import { map } from 'fp-ts/ReadonlyArray'
+  When performing the mapping operation, if the values in the functor are mapped to themselves, the result will be an unmodified functor.
+  Essentially mapping a functor instance through an identity function should yield the source functor instance unmodified
 
-const double = (n: number): number => n * 2
+</details>
 
-// iterates array twice
-console.log(pipe([1, 2, 3], map(double), map(increment))) // => [ 3, 5, 7 ]
+<details>
+  <summary><b>Functors preserve composition of morphisms</b></summary>
+  <br>
 
-// single iteration
-console.log(pipe([1, 2, 3], map(flow(double, increment)))) // => [ 3, 5, 7 ]
-```
+  ```ts
+  map(g ∘ f) = map(g) ∘ map(f)
+  ```
+
+  If two sequential mapping operations are performed one after the other using two functions (`f` and `g` in this case), the result should be the same as a single map operation with one function that is the composition of the two functions used in the two sequential mapping operations.
+
+  ```ts
+    import { flow, increment, pipe } from 'fp-ts/function'
+    import { map } from 'fp-ts/ReadonlyArray'
+
+    const double = (n: number): number => n * 2
+
+    // iterates array twice
+    console.log(pipe([1, 2, 3], map(double), map(increment))) // => [ 3, 5, 7 ]
+
+    // single iteration
+    console.log(pipe([1, 2, 3], map(flow(double, increment)))) // => [ 3, 5, 7 ]
+  ```
+
+</details>
 
 ## Functors and functional error handling
 
@@ -3452,7 +3474,7 @@ Practically, using `Option`, we're always in front of the `happy path`, error ha
 
 ## Functors compose
 
-Functors compose, meaning that given two functors `F` and `G` then the composition `F<G<A>>` is still a functor and the `map` of this composition is the composition of the `map`s.
+Functors compose, meaning that with any two functors, `F` and `G` for example, the composition (`F<G<A>>`) would still be a functor and the `map` of this composition would be the composition of the `map` operation on the two composed functors, that is, the composition of `F`'s `map` and `G`'s map.
 
 **Example** (`F = Task`, `G = Option`)
 
