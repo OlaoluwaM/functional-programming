@@ -30,7 +30,7 @@ export const startStatus: RetryStatus = {
 /**
  * A `RetryPolicy` is a function that takes an `RetryStatus` and
  * possibly returns a delay in milliseconds. Iteration numbers start
- * at zero and increase by one on each retry. A *undefined* return value from
+ * at zero and increase by one on each retry. An *undefined* return value from
  * the function implies we have reached the retry limit.
  */
 export interface RetryPolicy {
