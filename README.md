@@ -3577,7 +3577,7 @@ interface Response<A> {
 }
 ```
 
-Please note that since `body` is parametric, this makes `Response` a good candidate to find a functor instance given that `Response` is a an `n`-ary type constructor with `n >= 1` (a necessary condition).
+Note that since `body` is parametric, this `Response` type is a good candidate for a functor instance given that `Response` is a an `n`-ary type constructor with `n >= 1` (a necessary condition).
 
 To define a functor instance for `Response` we need to define a `map` function along some [technical details](https://gcanti.github.io/fp-ts/recipes/HKT.html) required by `fp-ts`.
 
@@ -4450,7 +4450,7 @@ const chain = <B, R, C>(g: (b: B) => Reader<R, C>) => (
 
 ## Manipulating programs
 
-Let's see now, how thanks to referential transparency and the monad concept we can programmaticaly manipulate programs.
+Let's see how we might programmaticaly manipulate programs using the concepts of referential transparency and Monads
 
 Here's a small program that reads / writes a file:
 
@@ -4530,7 +4530,7 @@ import { now } from 'fp-ts/Date'
 import { log } from 'fp-ts/Console'
 import { pipe } from 'fp-ts/function'
 
-// logs the computation lenght in milliseconds
+// logs the computation length in milliseconds
 export const time = <A>(ma: IO.IO<A>): IO.IO<A> =>
   pipe(
     now,
